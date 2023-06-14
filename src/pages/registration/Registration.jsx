@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import './registration.css'
 import { useNavigate, Link } from "react-router-dom";
 import Alert from '@mui/material/Alert';
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
 import { getDatabase, ref, set } from "firebase/database";
 
 
@@ -54,20 +54,26 @@ const Registration = () => {
 
         createUserWithEmailAndPassword(auth, email, password)
             .then((user) => {
-                set(ref(db, 'users/' + user.user.uid), {
-                    username: values.fullName,
-                    email: email,
-                });
-                console.log(user);
 
-                sendEmailVerification(auth.currentUser)
-                    .then((user) => {
-                        // Email verification sent!
-                        // ...
-
-                        navigate("/login")
-                        console.log("Email gese");
+                updateProfile(auth.currentUser, {
+                    displayName: values.fullName, photoURL: "https://i.ibb.co/17BmFyW/avater.png"
+                }).then(() => {
+                    set(ref(db, 'users/' + user.user.uid), {
+                        username: values.fullName,
+                        email: email,
                     });
+                    console.log(user);
+
+                    sendEmailVerification(auth.currentUser)
+                        .then((user) => {
+                            // Email verification sent!
+                            // ...
+
+                            navigate("/login")
+                            console.log("Email gese");
+                        });
+
+                })
 
             })
             .catch((error) => {

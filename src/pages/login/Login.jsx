@@ -14,7 +14,17 @@ let initial = {
 }
 
 const Login = () => {
-    const notify = (msg) => toast.warn(msg, {
+    const notifywarn = (msg) => toast.warn(msg, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+    });
+    const notifysuccess = (msg) => toast.success(msg, {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -58,9 +68,9 @@ const Login = () => {
             .then((user) => {
                 if (user.user.emailVerified) {
                     navigate('/bokbok/home')
-                    notify("Login Successful");
+                    notifysuccess("Login Successful");
                 } else {
-                    notify("Please Verify your email");
+                    notifywarn("Please Verify your email");
                 }
                 // Signed in 
                 // const user = userCredential.user;
